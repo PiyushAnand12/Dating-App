@@ -1,0 +1,681 @@
+// ─── Datasource ─────────────────────────────────────────
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// ─── Generator ──────────────────────────────────────────
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ─── Enums (Not supported in SQLite, using String mapping) ───
+// These are kept as comments or handled by Prisma automatically as strings
+// in SQLite, but we remove the actual enum blocks for clarity if needed.
+// However, Prisma 5+ supports enums in some providers, but not SQLite.
+// So we will keep them and Prisma will treat them as Strings in SQLite.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ─── Models ─────────────────────────────────────────────
+
+model User {
+  id               String           @id @default(cuid())
+  email            String?          @unique
+  phone            String?          @unique
+  role             String             @default("USER")
+
+  // ── Onboarding / profile ────────────────────────────
+  firstName        String?
+  dateOfBirth      DateTime?
+  gender           String?
+  bio              String?
+
+  // ── Location ────────────────────────────────────────
+  city             String?
+  latitude         Float?
+  longitude        Float?
+
+  // ── Extra profile fields ─────────────────────────────
+  height           Int?
+  jobTitle         String?
+  company          String?
+  livingIn         String?
+  relationshipGoal String?
+
+  // ── Profile media ────────────────────────────────────
+  avatarUrl        String?
+  kycVideoUrl      String?
+  governmentIdUrl  String?
+  incomeProofUrl   String?
+  isIncomeVerified Boolean          @default(false)
+
+  // ── Discovery ────────────────────────────────────────
+  discoverEnabled  Boolean          @default(true)
+
+  // ── Moderation / approval ────────────────────────────
+  profileStatus    String    @default("UNDER_REVIEW")
+
+  // ── Auth / state ─────────────────────────────────────
+  firebaseUid      String?          @unique
+  isVerified       Boolean          @default(false)
+  isOnboarded      Boolean          @default(false)
+  isProfileComplete Boolean         @default(false)
+  isActive         Boolean          @default(true)
+  lastActiveAt     DateTime?
+  lastLoginAt      DateTime?
+
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  // ── Subscription ────────────────────────────────────
+  gatewayCustomerId String?          @unique
+  subscriptionId   String?          @unique
+  subscriptionTier String @default("FREE")
+  subscriptionStatus String?
+  subscriptionExpiresAt DateTime?
+
+  subscription     Subscription?    @relation(fields: [subscriptionId], references: [id])
+  boosts           UserBoost[]
+
+  preferences      UserPreferences?
+  interests        UserInterest[]
+  photos           Photo[]          @relation("UserPhotos")
+  reviewedPhotos   Photo[]          @relation("PhotoReviewer")
+  actionsReceived  AdminAction[]    @relation("AdminActionTarget")
+  actionsTaken     AdminAction[]    @relation("AdminActionActor")
+
+  swipesMade       Swipe[]          @relation("SwipeActor")
+  swipesReceived   Swipe[]          @relation("SwipeTarget")
+
+  matchesAsUser1 Match[] @relation("MatchUser1")
+  matchesAsUser2 Match[] @relation("MatchUser2")
+
+  favorites        Favorite[]       @relation("FavoriteActor")
+  favoritedBy      Favorite[]       @relation("FavoriteTarget")
+
+  blocksInitiated  Block[]          @relation("BlockActor")
+  blocksReceived   Block[]          @relation("BlockTarget")
+
+  reportsMade      Report[]         @relation("ReportActor")
+  reportsReceived  Report[]         @relation("ReportTarget")
+  reportsResolved  Report[]         @relation("ReportResolver")
+
+  wishlists        Wishlist[]
+
+  messagesSent     Message[]        @relation("MessageSender")
+  messagesReceived Message[]        @relation("MessageReceiver")
+
+  emergencyContacts EmergencyContact[]
+  emergencyAlerts   EmergencyAlert[]
+  badges            UserBadge[]
+  
+  stories           Story[]
+  storyViews        StoryView[]
+  profilePrompts    ProfilePrompt[]
+  
+  callsMade        VideoCall[]      @relation("CallCaller")
+  callsReceived    VideoCall[]      @relation("CallReceiver")
+  
+  activitiesReceived Activity[]      @relation("ActivityRecipient")
+  activitiesStarted  Activity[]      @relation("ActivityActor")
+  
+  storyReactions    StoryReaction[]
+  
+  notificationTokens NotificationToken[]
+
+  appeals           Appeal[]
+  payments          Payment[]
+  recommendations   Recommendation[]
+  reviewedAppeals   Appeal[]         @relation("AppealReviewer")
+
+  @@index([latitude, longitude])
+  @@index([profileStatus, discoverEnabled, gender, dateOfBirth])
+  @@map("users")
+}
+
+model Wishlist {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  isPublic    Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       WishlistItem[]
+
+  @@index([userId])
+  @@map("wishlists")
+}
+
+model WishlistItem {
+  id          String   @id @default(cuid())
+  wishlistId  String
+  targetId    String
+  createdAt   DateTime @default(now())
+
+  wishlist    Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+
+  @@unique([wishlistId, targetId])
+  @@index([wishlistId])
+  @@map("wishlist_items")
+}
+
+model UserPreferences {
+  id                 String             @id @default(cuid())
+  userId             String             @unique
+
+  showMe             String   @default("EVERYONE")
+  minAge             Int                @default(18)
+  maxAge             Int                @default(99)
+  maxDistanceKm      Int                @default(50)
+  minHeight          Int?
+  maxHeight          Int?
+  relationshipGoals  String? @default("[]")
+  interestIds        String?           @default("[]")
+  activeWithinHours  Int?
+  sortBy             String?            @default("RECENTLY_ACTIVE")
+
+  distanceUnit       String             @default("KM")
+  hideDistance       Boolean            @default(false)
+  emailNotifications Boolean            @default(true)
+  pushNotifications  Boolean            @default(true)
+  incognitoEnabled   Boolean            @default(false)
+
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+model Photo {
+  id           String      @id @default(cuid())
+  userId       String
+  url          String
+  position     Int         @default(0)
+  version      Int         @default(1)
+
+  status       String @default("PENDING")
+  reviewedById String?
+  reviewedAt   DateTime?
+  reviewReason String?
+  moderationMetadata String?
+
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  user         User        @relation("UserPhotos",    fields: [userId],       references: [id], onDelete: Cascade)
+  reviewedBy   User?       @relation("PhotoReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([userId, position])
+  @@index([status])
+  @@index([reviewedById])
+  @@map("photos")
+}
+
+model AdminAction {
+  id          String          @id @default(cuid())
+  actorId     String
+  targetId    String
+  type        String
+  reason      String?
+  metadata    String?
+  createdAt   DateTime        @default(now())
+
+  actor       User            @relation("AdminActionActor",  fields: [actorId],  references: [id])
+  target      User            @relation("AdminActionTarget", fields: [targetId], references: [id])
+
+  @@index([actorId])
+  @@index([targetId])
+  @@index([type])
+  @@map("admin_actions")
+}
+
+model Swipe {
+  id          String         @id @default(cuid())
+  actorId     String
+  targetId    String
+  direction   String
+  createdAt   DateTime       @default(now())
+
+  actor       User           @relation("SwipeActor",  fields: [actorId],  references: [id], onDelete: Cascade)
+  target      User           @relation("SwipeTarget", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@unique([actorId, targetId])
+  @@index([actorId])
+  @@index([targetId])
+  @@index([direction])
+  @@map("swipes")
+}
+
+model Match {
+  id        String   @id @default(cuid())
+  user1Id   String
+  user2Id   String
+  createdAt DateTime @default(now())
+
+  user1 User @relation("MatchUser1", fields: [user1Id], references: [id], onDelete: Cascade)
+  user2 User @relation("MatchUser2", fields: [user2Id], references: [id], onDelete: Cascade)
+
+  @@unique([user1Id, user2Id])
+  @@index([user1Id, createdAt(sort: Desc)])
+  @@index([user2Id, createdAt(sort: Desc)])
+  @@map("matches")
+}
+
+model Favorite {
+  actorId    String
+  targetId   String
+  createdAt  DateTime @default(now())
+
+  actor      User     @relation("FavoriteActor",  fields: [actorId],  references: [id], onDelete: Cascade)
+  target     User     @relation("FavoriteTarget", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@id([actorId, targetId])
+  @@index([actorId])
+  @@index([targetId])
+  @@map("favorites")
+}
+
+model Block {
+  actorId    String
+  targetId   String
+  reason     String?
+  createdAt  DateTime @default(now())
+
+  actor      User     @relation("BlockActor",  fields: [actorId],  references: [id], onDelete: Cascade)
+  target     User     @relation("BlockTarget", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@id([actorId, targetId])
+  @@index([actorId])
+  @@index([targetId])
+  @@map("blocks")
+}
+
+model Report {
+  id           String       @id @default(cuid())
+  actorId      String
+  targetId     String
+  reason       String
+  details      String?
+  evidenceUrl  String?
+  status       String @default("PENDING")
+  resolvedById String?
+  resolvedAt   DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  actor        User         @relation("ReportActor",    fields: [actorId],      references: [id], onDelete: Cascade)
+  target       User         @relation("ReportTarget",   fields: [targetId],     references: [id], onDelete: Cascade)
+  resolvedBy   User?        @relation("ReportResolver", fields: [resolvedById], references: [id], onDelete: SetNull)
+
+  @@index([actorId])
+  @@index([targetId])
+  @@index([status])
+  @@index([resolvedById])
+  @@map("reports")
+}
+
+model Message {
+  id            String      @id @default(cuid())
+  senderId      String
+  receiverId    String
+  type          String @default("TEXT")
+  status        String @default("SENT")
+
+  // ── Content ──────────────────────────────────────────
+  body          String?
+  mediaUrl      String?
+  mediaMimeType String?
+
+  // ── Reply threading ───────────────────────────────────
+  replyToId     String?
+
+  // ── Edit support ──────────────────────────────────────
+  isEdited      Boolean     @default(false)
+  editedAt      DateTime?
+
+  // ── Soft delete ───────────────────────────────────────
+  isDeleted     Boolean     @default(false)
+  deletedAt     DateTime?
+
+  // ── Read receipt ─────────────────────────────────────
+  deliveredAt   DateTime?
+  readAt        DateTime?
+
+  // ── Reactions ────────────────────────────────────────
+  reactions     String?       @default("[]")
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  sender        User        @relation("MessageSender",   fields: [senderId],   references: [id], onDelete: Cascade)
+  receiver      User        @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  replyTo       Message?    @relation("MessageReplies",  fields: [replyToId],  references: [id], onDelete: SetNull)
+  replies       Message[]   @relation("MessageReplies")
+
+  // Covers: load conversation thread ordered by time
+  @@index([senderId,   createdAt(sort: Desc)])
+  // Covers: load inbox / received messages ordered by time
+  @@index([receiverId, createdAt(sort: Desc)])
+  // Covers: full conversation between two users ordered by time
+  @@index([senderId,   receiverId, createdAt(sort: Desc)])
+  @@index([replyToId])
+  @@map("messages")
+}
+
+model NotificationToken {
+  id        String               @id @default(cuid())
+  userId    String
+  token     String               @unique
+  platform  String
+  isActive  Boolean              @default(true)
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+
+  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("notification_tokens")
+}
+
+model Interest {
+  id          String           @id @default(cuid())
+  name        String           @unique
+  slug        String           @unique
+  category    String
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  users       UserInterest[]
+
+  @@index([category])
+  @@map("interests")
+}
+
+model UserInterest {
+  userId     String
+  interestId String
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  interest   Interest @relation(fields: [interestId], references: [id], onDelete: Cascade)
+
+  @@id([userId, interestId])
+  @@map("user_interests")
+}
+
+model Subscription {
+  id               String           @id @default(cuid())
+  providerId       String           @unique // Renamed from stripeId
+  userId           String           @unique
+  tier             String
+  status           String
+  planId           String?          // Renamed from priceId
+  
+  cancelAtPeriodEnd Boolean         @default(false)
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  user             User?
+  
+  @@map("subscriptions")
+}
+
+model UserBoost {
+  id        String   @id @default(cuid())
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("user_boosts")
+}
+
+model EmergencyContact {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  phone     String
+  email     String?
+  relation  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("emergency_contacts")
+}
+
+model EmergencyAlert {
+  id        String   @id @default(cuid())
+  userId    String
+  latitude  Float?
+  longitude Float?
+  status    String @default("ACTIVE")
+  createdAt DateTime             @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("emergency_alerts")
+}
+
+model UserBadge {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  grantedAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type])
+  @@index([userId])
+  @@map("user_badges")
+}
+
+model Story {
+  id           String      @id @default(cuid())
+  userId       String
+  mediaUrl     String
+  mediaType    String @default("IMAGE") // IMAGE, VIDEO
+  
+  status       String @default("PENDING")
+  moderationMetadata String?
+  
+  createdAt    DateTime    @default(now())
+  expiresAt    DateTime
+  
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  views        StoryView[]
+  reactions    StoryReaction[]
+
+  @@index([userId, expiresAt])
+  @@index([status])
+  @@map("stories")
+}
+
+model StoryView {
+  id        String   @id @default(cuid())
+  storyId   String
+  viewerId  String
+  createdAt DateTime @default(now())
+
+  story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  viewer    User     @relation(fields: [viewerId], references: [id], onDelete: Cascade)
+
+  @@unique([storyId, viewerId])
+  @@map("story_views")
+}
+
+model ProfilePrompt {
+  id        String   @id @default(cuid())
+  userId    String
+  question  String
+  answer    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("profile_prompts")
+}
+
+
+
+model VideoCall {
+  id           String          @id @default(cuid())
+  callerId     String
+  receiverId   String
+  status       String @default("DIALED")
+  
+  duration     Int?            @default(0) // Duration in seconds
+  startTime    DateTime?
+  endTime      DateTime?
+  
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  caller       User            @relation("CallCaller", fields: [callerId], references: [id], onDelete: Cascade)
+  receiver     User            @relation("CallReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([callerId])
+  @@index([receiverId])
+  @@map("video_calls")
+}
+
+
+
+model Activity {
+  id        String   @id @default(cuid())
+  userId    String   // Recipient of the activity
+  actorId   String   // User who triggered the activity
+  type      String
+  metadata  String?    // e.g. { storyId: '...', emoji: '...' }
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation("ActivityRecipient", fields: [userId],  references: [id], onDelete: Cascade)
+  actor     User     @relation("ActivityActor",     fields: [actorId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("activities")
+}
+
+model StoryReaction {
+  id        String   @id @default(cuid())
+  storyId   String
+  userId    String
+  emoji     String
+  createdAt DateTime @default(now())
+
+  story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId],  references: [id], onDelete: Cascade)
+
+  @@unique([storyId, userId, emoji])
+  @@map("story_reactions")
+}
+
+model Appeal {
+  id           String       @id @default(cuid())
+  userId       String
+  reason       String
+  status       String @default("PENDING")
+  adminRemarks String?
+  reviewedById String?
+  reviewedAt   DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy   User?        @relation("AppealReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([status])
+  @@map("appeals")
+}
+
+model Payment {
+  id               String   @id @default(cuid())
+  userId           String
+  amount           Float
+  currency         String   @default("INR")
+  status           String   // PENDING, SUCCESS, FAILED
+  gateway          String   @default("RAZORPAY")
+  gatewayPaymentId String?  @unique
+  gatewayOrderId   String?  @unique
+  planType         String?  // GOLD, PLATINUM, etc.
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("payments")
+}
+
+model Recommendation {
+  id            String   @id @default(cuid())
+  userId        String
+  targetId      String
+  score         Int
+  isAccepted    Boolean? // NULL = pending, true = liked, false = passed
+  shownAt       DateTime @default(now())
+  respondedAt   DateTime?
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, targetId, shownAt])
+  @@index([userId])
+  @@map("recommendations")
+}

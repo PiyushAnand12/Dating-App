@@ -1,0 +1,423 @@
+/* ════════════════════════════════════════════════════
+   Filter Modal — Production-Grade Premium Styles
+   ════════════════════════════════════════════════════ */
+
+.filter-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.filter-modal-content {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(18, 12, 24, 0.85);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: none;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+  scrollbar-width: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.filter-modal-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Header ──────────── */
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: rgba(18, 12, 24, 0.75);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  padding: 20px 24px 16px;
+  z-index: 10;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.filter-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.close-btn {
+  background: #2c2c2e;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a1a1a6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.close-btn:hover {
+  background: #3a3a3c;
+  color: #ffffff;
+}
+
+/* ─── Body ───────────────────────────────────────── */
+
+.filter-body {
+  padding: 24px;
+}
+
+.filter-group {
+  margin-bottom: 32px;
+}
+
+.filter-group label {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 16px;
+  letter-spacing: 0.3px;
+}
+
+/* ─── Segmented Controls (Toggle Options) ────────── */
+
+.toggle-options {
+  display: flex;
+  background: rgba(118, 118, 128, 0.24);
+  padding: 2px;
+  border-radius: 12px;
+}
+
+.toggle-options.flex-wrap {
+  flex-wrap: wrap;
+  background: transparent;
+  padding: 0;
+  gap: 8px;
+}
+
+.toggle-options button {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-options.flex-wrap button {
+  flex: 0 1 auto;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 10px 20px;
+}
+
+.toggle-options button.active {
+  background: linear-gradient(135deg, #af52de 0%, #ff2d55 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(175, 82, 222, 0.3);
+}
+
+.toggle-options.flex-wrap button.active {
+  background: linear-gradient(135deg, #af52de 0%, #ff2d55 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(175, 82, 222, 0.3);
+}
+
+/* ─── Range Sliders ──────────────────────────────── */
+
+.range-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.range-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.range-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.range-label span:first-child {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.range-label span:last-child {
+  font-size: 1rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  cursor: grab;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.1s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.05);
+}
+
+/* ─── Sub Group (Settings List) ──────────────────── */
+
+.sub-group {
+  margin-top: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-row > span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.setting-info span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+  display: block;
+}
+
+.setting-info p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 4px;
+}
+
+.unit-toggle {
+  display: flex;
+  background: rgba(118, 118, 128, 0.24);
+  padding: 2px;
+  border-radius: 8px;
+}
+
+.unit-toggle button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.unit-toggle button.active {
+  background: linear-gradient(135deg, #af52de 0%, #ff2d55 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(175, 82, 222, 0.3);
+}
+
+/* ─── Switch ─────────────────────────────────────── */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  transition: .3s ease;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 2px;
+  bottom: 2px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: .3s ease;
+}
+
+input:checked + .slider {
+  background: linear-gradient(135deg, #af52de 0%, #ff2d55 100%);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/* ─── Interests / Goals Grid ─────────────────────── */
+
+.interests-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.interest-chip {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 20px;
+  border-radius: 100px;
+  font-size: 0.95rem;
+  color: #ffffff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.interest-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.interest-chip.active {
+  background: linear-gradient(135deg, #af52de 0%, #ff2d55 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(175, 82, 222, 0.3);
+}
+
+/* ─── Footer ─────────────────────────────────────── */
+
+.filter-footer {
+  position: sticky;
+  bottom: 0;
+  background: rgba(18, 12, 24, 0.75);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  padding: 16px 24px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  z-index: 10;
+}
+
+.apply-btn {
+  width: 100%;
+  padding: 18px;
+  border-radius: 100px;
+  border: none;
+  background: linear-gradient(135deg, #af52de 0%, #ff2d55 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 24px rgba(175, 82, 222, 0.4);
+}
+
+.apply-btn:hover:not(:disabled) {
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(175, 82, 222, 0.5);
+}
+
+.apply-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.apply-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Responsive ─────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .filter-modal-content {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+  
+  .filter-header {
+    padding: 16px 20px 12px;
+  }
+
+  .filter-body {
+    padding: 20px;
+  }
+
+  .filter-footer {
+    padding: 16px 20px 20px;
+  }
+}
+

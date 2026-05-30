@@ -1,0 +1,13 @@
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  background-color: var(--bg-deep);
+  box-shadow: 0 0 50px rgba(0,0,0,0.8);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+

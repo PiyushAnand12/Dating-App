@@ -1,0 +1,274 @@
+.trust-badges-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0;
+  pointer-events: auto;
+  /* Ensure hover works inside card-info */
+}
+
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 12px;
+  /* Less rounded for a modern tech feel */
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: help;
+  pointer-events: auto;
+}
+
+.trust-badge:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.trust-badge svg {
+  filter: drop-shadow(0 0 2px currentColor);
+}
+
+/* Subtle, Professional Color Palettes */
+.badge-verified {
+  background: rgba(48, 209, 88, 0.08);
+  color: #34c759;
+  border-color: rgba(48, 209, 88, 0.15);
+}
+
+.badge-premium {
+  background: rgba(255, 214, 10, 0.08);
+  color: #ffd60a;
+  border-color: rgba(255, 214, 10, 0.15);
+}
+
+.badge-safety {
+  background: rgba(10, 132, 255, 0.08);
+  color: #0a84ff;
+  border-color: rgba(10, 132, 255, 0.15);
+}
+
+.badge-top {
+  background: rgba(191, 90, 242, 0.08);
+  color: #bf5af2;
+  border-color: rgba(191, 90, 242, 0.15);
+}
+
+.badge-phone {
+  background: rgba(100, 210, 255, 0.08);
+  color: #64d2ff;
+  border-color: rgba(100, 210, 255, 0.15);
+}
+
+.badge-kyc {
+  background: rgba(94, 92, 230, 0.08);
+  color: #5e5ce6;
+  border-color: rgba(94, 92, 230, 0.15);
+}
+
+.badge-id {
+  background: rgba(48, 209, 88, 0.08);
+  color: #30d158;
+  border-color: rgba(48, 209, 88, 0.15);
+}
+
+.badge-income {
+  background: rgba(255, 159, 10, 0.08);
+  color: #ff9f0a;
+  border-color: rgba(255, 159, 10, 0.15);
+}
+
+/* ─── AI Insight Interactive Badge ─── */
+.badge-ai-insight {
+  padding: 0 !important;
+  width: 28px;
+  height: 28px;
+  max-width: 28px;
+  background: rgba(175, 82, 222, 0.1);
+  color: #af52de;
+  border: 1px solid rgba(175, 82, 222, 0.25);
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.ai-insight-balloon {
+  position: absolute;
+  bottom: 100%;
+  left: -140px !important;
+  /* Shifted left to allow rightward growth without cropping */
+  right: auto !important;
+  margin-bottom: 34px;
+  width: 185px;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.9) translateY(15px);
+  transform-origin: bottom left;
+  /* Grows to the right */
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1000;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(60px) saturate(280%) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.4),
+    0 10px 25px rgba(139, 92, 246, 0.25),
+    inset 0 0 15px rgba(255, 255, 255, 0.05);
+  padding: 0;
+  pointer-events: none;
+}
+
+.badge-ai-insight:hover .ai-insight-balloon {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: scale(1) translateY(0);
+}
+
+.ai-insight-balloon-inner {
+  padding: 12px 18px;
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+.ai-insight-text {
+  font-size: 11px;
+  font-weight: 500;
+  color: #ffffff !important;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  display: block !important;
+  visibility: visible !important;
+  text-align: left;
+  white-space: normal;
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.ai-insight-text strong {
+  font-weight: 700;
+  color: #ffffff;
+  margin-right: 4px;
+}
+
+.ai-insight-balloon-arrow {
+  position: absolute;
+  bottom: -8px;
+  left: 154px !important;
+  /* 140px bubble offset + 14px icon center */
+  right: auto !important;
+  width: 16px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(50px);
+  transform: rotate(45deg);
+  border: none;
+  border-right: 0.5px solid rgba(255, 255, 255, 0.35);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.35);
+  z-index: -1;
+}
+
+.ai-insight-label {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  /* Professional tracking */
+  color: #af52de;
+  opacity: 0.9;
+}
+
+.ai-insight-text {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.5;
+  /* Better readability */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.ai-sparkle-trigger {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(175, 82, 222, 0.25), rgba(88, 86, 214, 0.25));
+  border-radius: 11px;
+}
+
+.ai-insight-label {
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #af52de;
+}
+
+.ai-insight-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  line-height: 1.4;
+  white-space: normal;
+  /* Allow wrapping in balloon */
+}
+
+/* Compact/Small Mode - Icon only with subtle circular glow */
+.trust-badges-container.sm {
+  gap: 8px;
+  margin: 4px 0 12px;
+}
+
+.trust-badges-container.sm .trust-badge {
+  padding: 6px;
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  justify-content: center;
+}
+
+.trust-badges-container.sm span {
+  display: none;
+}
+
+/* Premium Mode (for Discovery Deck) */
+.trust-badges-container.premium {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 8px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.trust-badges-container.premium .trust-badge {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 4px 8px;
+  border-radius: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.trust-badges-container.premium .trust-badge:last-child {
+  border-right: none;
+}

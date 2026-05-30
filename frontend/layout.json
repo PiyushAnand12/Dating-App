@@ -1,0 +1,33 @@
+{
+  "viewport": {
+    "w": 1920,
+    "h": 991
+  },
+  "appContainer": {
+    "top": 0,
+    "left": 720,
+    "width": 480,
+    "height": 991,
+    "display": "flex",
+    "visibility": "visible"
+  },
+  "chatPage": {
+    "top": 0,
+    "left": 720,
+    "width": 480,
+    "height": 991,
+    "display": "flex",
+    "visibility": "visible"
+  },
+  "chatWindow": {
+    "top": 0,
+    "left": 0,
+    "width": 0,
+    "height": 0,
+    "display": "none",
+    "visibility": "visible"
+  },
+  "chatHeader": null,
+  "messagesArea": null,
+  "inputContainer": null
+}
