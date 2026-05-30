@@ -65,8 +65,8 @@ Before running the project locally, make sure you have:
 ### 5.1. Local Environment Setup
 ```bash
 # Clone the repository
-git clone [YOUR_REPOSITORY_URL]
-cd [YOUR_REPOSITORY_DIRECTORY]
+git clone https://github.com/PiyushAnand12/Dating-App.git
+cd Dating-App
 
 # Backend bootstrap
 npm install
